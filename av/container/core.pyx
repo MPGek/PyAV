@@ -12,7 +12,7 @@ from av.format cimport build_container_format
 from av.utils cimport err_check, dict_to_avdict
 
 from av.dictionary import Dictionary # not cimport
-from av.utils import AVError # not cimport
+from av.utils import AVError, fsencode # not cimport
 
 
 
@@ -37,8 +37,13 @@ cdef class ContainerProxy(object):
         self.metadata_errors = container.metadata_errors
         self.name = container.name
         self.writeable = container.writeable
-
-        cdef char *name = self.name
+        
+        if isinstance(self.name, unicode):
+            fname = fsencode(self.name)
+        else:
+            fname = self.name
+        
+        cdef char *name = fname
 
 
         cdef lib.AVOutputFormat *ofmt

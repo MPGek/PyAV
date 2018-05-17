@@ -206,3 +206,12 @@ cdef flag_in_bitfield(uint64_t bitfield, uint64_t flag):
     if not flag:
         return None
     return bool(bitfield & flag)
+    
+# convert filename to/from unicode string
+try:
+    from os import fsencode, fsdecode
+except ImportError:
+    _fsencoding = sys.getfilesystemencoding()
+    fsencode = lambda s: s.encode(_fsencoding)
+    fsdecode = lambda s: s.decode(_fsencoding)      
+    
